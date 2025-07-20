@@ -5,7 +5,11 @@
   "projects": {
     "my-angular-app": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -14,22 +18,16 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -73,22 +71,19 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "a1bbbe86-23e7-49a7-bef8-12c4bc627373"
   }
 }
