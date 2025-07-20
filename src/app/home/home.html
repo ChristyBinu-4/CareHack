@@ -1,22 +1,13 @@
-<h2>Game Portal</h2>
+<h2>{{ title() }}</h2>
 
 <nav>
-  <div class="carousel">
-    <a routerLink="/color-symphony" routerLinkActive="active">
-      <h3>Color Symphony</h3>
-      <!-- <p>Give description</p> -->
-    </a>
-    <a routerLink="/alphabet" routerLinkActive="active">
-      <h3>Alphabet</h3>
-      <!-- <p>Give description</p> -->
-    </a>
-    
-  </div>
-
-  <div class="carousel-nav">
-    <button (click)="manualScroll(-1)" class="nav-button prev">←</button>
-    <button (click)="manualScroll(1)" class="nav-button next">→</button>
-  </div>
+  <ngb-carousel>
+    <ng-template ngbSlide *ngFor="let item of carouselItems; let i = index" [id]="'slide-' + i">
+      <a [routerLink]="item.link" routerLinkActive="active">
+        <h3>{{ item.title }}</h3>
+      </a>
+    </ng-template>
+  </ngb-carousel>
 </nav>
-<router-outlet></router-outlet>
 
+<router-outlet></router-outlet>

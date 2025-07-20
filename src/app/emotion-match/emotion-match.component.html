@@ -1,0 +1,197 @@
+<div class="container" [class.high-contrast]="highContrast">
+  <header>
+    <h1>Emoji Emotion Match</h1>
+    <p>Help children learn emotions by matching emojis to prompts</p>
+  </header>
+
+  <div class="game-container">
+    <!-- Main Game Board -->
+    <div *ngIf="!gameActive && !showResultsScreen" class="welcome-screen">
+      <div class="welcome-emoji" aria-hidden="true">🎯</div>
+      <h2 class="welcome-title">Welcome to Emoji Emotion Match!</h2>
+      <p class="welcome-desc">
+        Test your emotion recognition skills by matching emojis to feelings.<br>
+        Click <b>Start Game</b> to begin your challenge!
+      </p>
+      <button class="welcome-start-btn ripple-btn" (click)="startNewGame($event)"><span class="ripple"></span>Start Game</button>
+    </div>
+    <div class="game-board" #gameBoard tabindex="-1"
+         (keydown)="onKeyDown($event)"
+         *ngIf="gameActive && !showResultsScreen">
+      <div class="game-info">
+        <div class="round-info">
+          <div class="progressbar-simple">
+            <div class="progressbar-bg-simple">
+              <div
+                class="progressbar-fill-simple"
+                [style.width.%]="(currentRound/totalRounds)*100"
+              ></div>
+            </div>
+            <div class="progressbar-label-simple">
+              Round {{ currentRound }} of {{ totalRounds }}
+            </div>
+          </div>
+        </div>
+        <div class="score-info">Score: <span>{{score}}</span></div>
+      </div>
+
+      <div class="drop-area"
+           [class.highlight]="dropHighlight"
+           (dragover)="onDropAreaDragOver($event)"
+           (dragleave)="onDropAreaDragLeave($event)"
+           (drop)="onDropAreaDrop($event)">
+        <div class="prompt-text">{{promptText}}</div>
+        <div [class]="feedbackClass" aria-live="polite">{{feedback}}</div>
+      </div>
+
+      <div class="emoji-grid">
+        <div *ngFor="let emoji of roundEmojis; let i = index"
+             class="emoji-item"
+             [class.selected]="keyboardSelectedEmoji === i"
+             [class.correct]="feedbackClass === 'feedback correct' && selectedEmojis.length > 0 && selectedEmojis[selectedEmojis.length-1].emoji === emoji.emoji"
+             [class.incorrect]="feedbackClass === 'feedback incorrect' && selectedEmojis.length > 0 && selectedEmojis[selectedEmojis.length-1].emoji === emoji.emoji"
+             (click)="handleEmojiSelection(emoji, i)"
+             (mouseenter)="handleEmojiHover(emoji)"
+             draggable="true"
+             (dragstart)="onDragStart($event, emoji)"
+             (dragend)="onDragEnd()"
+             [attr.aria-label]="emoji.alt"
+             [attr.aria-selected]="keyboardSelectedEmoji === i"
+             role="button"
+             tabindex="0">
+          {{emoji.emoji}}
+        </div>
+      </div>
+
+      <div class="controls">
+        <button type="button" (click)="gameActive ? openConfirmationModal() : startNewGame($event)" class="ripple-btn">
+          <span class="ripple"></span>{{gameActive ? 'Quit Game' : 'New Game'}}
+        </button>
+        <button type="button" (click)="openHelpModal()" class="ripple-btn"><span class="ripple"></span>Help</button>
+      </div>
+    </div>
+
+    <!-- Accessibility Panel -->
+    <!-- Results Screen -->
+    <div class="results-screen" *ngIf="showResultsScreen">
+      <canvas #confettiCanvas class="confetti-canvas" width="600" height="300" aria-hidden="true"></canvas>
+      <h2 class="results-title">Game Complete!</h2>
+      <div class="final-score">Your Score: <span>{{score}}</span>/{{totalRounds}}</div>
+      <div class="results-grid">
+        <span *ngFor="let sel of selectedEmojis"
+              class="result-emoji"
+              [class.correct]="sel.correct"
+              [class.incorrect]="!sel.correct">
+          {{sel.emoji}}
+        </span>
+      </div>
+      <button type="button" (click)="playAgain($event)" class="ripple-btn"><span class="ripple"></span>Play Again</button>
+    </div>
+
+    <div class="accessibility-panel" [ngClass]="{'expanded': panelExpanded}">
+      <div class="panel-header" (click)="togglePanel()">
+        <div class="panel-title">
+          <span class="panel-icon" aria-hidden="true" style="margin-right:0.5em;">🛡️</span>
+          Accessibility Settings
+        </div>
+        <div class="panel-toggle">{{ panelExpanded ? '▼' : '▶' }}</div>
+      </div>
+      <div class="panel-content" *ngIf="panelExpanded">
+<!-- Impairment Selection -->
+<div class="impairment-group" role="radiogroup" aria-label="Select impairment type">
+  <label *ngFor="let imp of impairmentOptions" class="impairment-radio">
+    <input
+      type="radio"
+      name="impairment"
+      [value]="imp.value"
+      [checked]="selectedImpairment === imp.value"
+      (change)="onImpairmentChange(imp.value)"
+    />
+    <span>{{ imp.label }}</span>
+  </label>
+</div>
+        <div class="toggle-group">
+          <label class="toggle-switch">
+            <input type="checkbox" [checked]="highContrast" (change)="toggleHighContrast($event)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">High Contrast</span>
+          <div class="toggle-tooltip">For visually impaired users - increases contrast and text size</div>
+        </div>
+        <div class="toggle-group">
+          <label class="toggle-switch">
+            <input type="checkbox" [checked]="soundEffects" (change)="toggleSoundEffects($event)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Sound Effects</span>
+          <div class="toggle-tooltip">For hearing users - enables game sounds</div>
+        </div>
+        <div class="toggle-group">
+          <label class="toggle-switch">
+            <input type="checkbox" [checked]="voiceFeedback" (change)="toggleVoiceFeedback($event)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Voice Feedback</span>
+          <div class="toggle-tooltip">For visually impaired users - reads prompts and feedback</div>
+        </div>
+        <div class="toggle-group">
+          <label class="toggle-switch">
+            <input type="checkbox" [checked]="keyboardMode" (change)="toggleKeyboardMode($event)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Keyboard Mode</span>
+          <div class="toggle-tooltip">For users with motor impairments - keyboard-only controls</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="confirmation-modal" *ngIf="showConfirmationModal" (click)="confirmQuit()">
+    <div class="confirmation-content" (click)="$event.stopPropagation()">
+      <div class="confirmation-text">Are you sure you want to quit the current game?</div>
+      <div class="confirmation-buttons">
+        <button type="button" (click)="confirmQuit($event)" class="ripple-btn"><span class="ripple"></span>Yes, Quit</button>
+        <button type="button" (click)="cancelQuit($event)" class="ripple-btn"><span class="ripple"></span>No, Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div class="help-modal" *ngIf="showHelpModal" (click)="closeHelpModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button type="button" class="close-modal ripple-btn" (click)="closeHelpModal($event)"><span class="ripple"></span>&times;</button>
+      <h2 class="modal-title">How to Play</h2>
+      <div class="modal-section">
+        <h3 class="modal-section-title">Game Objective</h3>
+        <p>Match the emoji that best represents the emotion shown in the prompt. Complete all 10 rounds to finish the game!</p>
+      </div>
+      <div class="modal-section">
+        <h3 class="modal-section-title">Mouse/Touch Controls</h3>
+        <ul>
+          <li>Click or tap on emojis to select them</li>
+          <li>Drag and drop emojis to the drop area (when keyboard mode is off)</li>
+          <li>Hover over emojis to hear their names (with voice feedback enabled)</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h3 class="modal-section-title">Keyboard Controls</h3>
+        <ul>
+          <li>Arrow keys (← → or ↑ ↓) to navigate between emojis</li>
+          <li>Enter or Space to select/submit an emoji</li>
+          <li>Escape to cancel selection</li>
+          <li>Tab key to navigate all interactive controls</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h3 class="modal-section-title">Accessibility Features</h3>
+        <ul>
+          <li>High Contrast Mode for better visibility</li>
+          <li>Voice feedback for all prompts and selections</li>
+          <li>Keyboard-only navigation option</li>
+          <li>Reduced motion options (respects system preferences)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

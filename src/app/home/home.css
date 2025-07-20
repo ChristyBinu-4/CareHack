@@ -23,22 +23,9 @@ nav {
   max-width: 1200px;
   margin: 0 auto 3rem;
   position: relative;
-  overflow: hidden;
-}
-
-.carousel {
-  display: flex;
-  width: max-content;
-  animation: scroll 20s linear infinite;
-  padding: 2rem 0;
-}
-
-nav:hover .carousel {
-  animation-play-state: paused;
 }
 
 .carousel a {
-  min-width: 300px;
   height: 400px;
   background: linear-gradient(135deg, #1e1e2d 0%, #2a2a3a 100%);
   border-radius: 15px;
@@ -51,10 +38,8 @@ nav:hover .carousel {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  margin: 0 1rem;
   text-decoration: none;
   color: white;
-  scroll-snap-align: center;
 }
 
 .carousel a::before {
@@ -81,51 +66,6 @@ nav:hover .carousel {
   font-size: 1.8rem;
   margin-bottom: 1rem;
   color: #00ffaa;
-}
-
-.carousel a p {
-  padding: 0 1.5rem;
-  text-align: center;
-  color: #aaa;
-}
-
-/* Navigation arrows */
-.carousel-nav {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.carousel-nav button {
-  pointer-events: all;
-  background: rgba(0, 168, 255, 0.7);
-  border: none;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.carousel-nav button:hover {
-  background: rgba(0, 168, 255, 1);
-  transform: scale(1.1);
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-300px * 3 - 2rem * 3)); /* Adjust based on item count */
-  }
 }
 
 router-outlet {
