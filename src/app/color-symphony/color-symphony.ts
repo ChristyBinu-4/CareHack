@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true
 })
 export class ColorSymphony {
+  @ViewChild('rootDiv', { static: false }) rootDiv!: ElementRef<HTMLDivElement>;
   isGameActive = false;
 
   title = 'Color Symphony';
@@ -38,6 +39,9 @@ export class ColorSymphony {
 
   startGame() {
     this.isGameActive = true;
+    setTimeout(() => {
+      this.rootDiv?.nativeElement?.focus();
+    }, 0);
     this.sequence = [];
     this.playerSequence = [];
     this.level = 1;
