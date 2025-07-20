@@ -27,6 +27,9 @@ interface SelectedEmoji {
     styleUrls: ['./emotion-match.component.css']
 })
 export class EmotionMatchComponent implements OnInit {
+    // Results summary and suggestions
+    resultSummary: string = '';
+    resultSuggestions: string[] = [];
     // Confetti
     @ViewChild('confettiCanvas', { static: false }) confettiCanvasRef!: ElementRef<HTMLCanvasElement>;
     confettiActive = false;
@@ -502,8 +505,38 @@ export class EmotionMatchComponent implements OnInit {
     endGame() {
         this.gameActive = false;
         this.showResultsScreen = true;
+        this.computeResultSummaryAndSuggestions();
         this.speak(`Game complete. Your score is ${this.score} out of ${this.totalRounds}.`);
         setTimeout(() => this.launchConfetti(), 400);
+    }
+
+    // Compute summary and suggestions for results screen
+    computeResultSummaryAndSuggestions() {
+        const total = this.selectedEmojis.length;
+        const correct = this.selectedEmojis.filter(e => e.correct).length;
+        this.resultSummary = `You recognized ${correct} out of ${total} emotions correctly.`;
+
+        // Count incorrect answers by emotion name
+        const missed: { [name: string]: number } = {};
+        for (const sel of this.selectedEmojis) {
+            if (!sel.correct) {
+                missed[sel.name] = (missed[sel.name] || 0) + 1;
+            }
+        }
+        const missedEmotions = Object.keys(missed);
+        if (missedEmotions.length === 0) {
+            this.resultSuggestions = ["Excellent! You recognized all emotions correctly. Try a new game for more practice."];
+        } else {
+            // Sort by most missed
+            missedEmotions.sort((a, b) => missed[b] - missed[a]);
+            this.resultSuggestions = [
+                `Consider practicing these emotions: ${missedEmotions.map(name => {
+                    const emoji = this.emotions.find(e => e.name === name)?.emoji || '';
+                    return `${emoji} (${name})`;
+                }).join(', ')}.`,
+                "Review the differences between these emotions and try again!"
+            ];
+        }
     }
 
     playAgain(event?: Event) {
