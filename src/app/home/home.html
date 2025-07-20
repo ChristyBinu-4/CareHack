@@ -1,13 +1,23 @@
-<h2>{{ title() }}</h2>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <h1>Welcome to CareHack</h1>
+    <p class="subtitle">Engage. Learn. Play. Discover a world of interactive learning experiences for kids.</p>
+    <a class="cta-btn" [routerLink]="carouselItems[0]?.link">Get Started</a>
+  </div>
+</section>
 
-<nav>
+<!-- Carousel Section -->
+<section class="carousel-section">
   <ngb-carousel>
     <ng-template ngbSlide *ngFor="let item of carouselItems; let i = index" [id]="'slide-' + i">
-      <a [routerLink]="item.link" routerLinkActive="active">
+      <a [routerLink]="item.link" routerLinkActive="active" class="carousel-card">
+        <img [src]="item.img || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'" alt="{{ item.title }}" class="carousel-img" />
         <h3>{{ item.title }}</h3>
       </a>
     </ng-template>
   </ngb-carousel>
-</nav>
+</section>
 
 <router-outlet></router-outlet>

@@ -1,75 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap');
+
 :host {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background: #0f0f1a;
-  padding: 2rem;
-  color: white;
-  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a233a 100%);
+  padding: 0;
+  color: #f4f8fb;
+  font-family: 'Montserrat', 'Arial', sans-serif;
   overflow-x: hidden;
 }
 
-h2 {
-  color: #00a8ff;
+/* Hero Section */
+.hero {
+  width: 100vw;
+  min-height: 420px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 2rem;
-  font-size: 2.5rem;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+  overflow: hidden;
 }
 
-nav {
+.hero-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  filter: brightness(0.5) blur(2px);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  padding: 3rem 2rem;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 32px rgba(0,168,255,0.3);
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  color: #e0f7fa;
+  text-shadow: 0 2px 8px rgba(0,168,255,0.15);
+}
+
+.cta-btn {
+  display: inline-block;
+  padding: 0.9rem 2.2rem;
+  background: linear-gradient(90deg, #00a8ff 0%, #00ffaa 100%);
+  color: #0f0f1a;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  box-shadow: 0 6px 24px rgba(0,168,255,0.25);
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+}
+.cta-btn:hover {
+  transform: scale(1.07);
+  background: linear-gradient(90deg, #00ffaa 0%, #00a8ff 100%);
+  box-shadow: 0 12px 32px rgba(0,255,170,0.25);
+}
+
+/* Carousel Section */
+.carousel-section {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto 3rem;
   position: relative;
 }
 
-.carousel a {
+.carousel-card {
   height: 400px;
   background: linear-gradient(135deg, #1e1e2d 0%, #2a2a3a 100%);
-  border-radius: 15px;
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(.4,2,.3,1);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
   cursor: pointer;
   text-decoration: none;
-  color: white;
+  color: #fff;
+  padding-bottom: 2.5rem;
+  margin: 0 0.5rem;
 }
 
-.carousel a::before {
+.carousel-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
+  top: 0; left: 0; right: 0;
+  height: 6px;
   background: linear-gradient(90deg, #00a8ff, #00ffaa);
 }
 
-.carousel a:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 30px rgba(0, 168, 255, 0.4);
+.carousel-card:hover {
+  transform: scale(1.05) translateY(-8px);
+  box-shadow: 0 18px 40px rgba(0, 168, 255, 0.35);
 }
 
-.carousel a.active {
+.carousel-card.active {
   transform: scale(1.08);
   border: 2px solid #00a8ff;
 }
 
-.carousel a h3 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+.carousel-img {
+  width: 100%;
+  max-width: 320px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 16px rgba(0,168,255,0.12);
+  background: #222;
+  transition: filter 0.2s;
+}
+
+.carousel-card:hover .carousel-img {
+  filter: brightness(1.08) saturate(1.2);
+}
+
+.carousel-card h3 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
   color: #00ffaa;
+  font-weight: 700;
+  text-shadow: 0 2px 12px rgba(0,255,170,0.12);
 }
 
 router-outlet {
   width: 80%;
   max-width: 800px;
   margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .carousel-card {
+    height: 320px;
+    max-width: 90vw;
+  }
+  .carousel-img {
+    max-width: 220px;
+    height: 140px;
+  }
+  .hero-content h1 {
+    font-size: 2.1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 260px;
+  }
+  .hero-content {
+    padding: 1.2rem 0.5rem;
+  }
+  .carousel-card {
+    height: 220px;
+    padding-bottom: 1rem;
+  }
+  .carousel-img {
+    max-width: 120px;
+    height: 70px;
+  }
+  .hero-content h1 {
+    font-size: 1.3rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
 }
