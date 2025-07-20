@@ -1,0 +1,39 @@
+<div  class="fullscreen-container" [class.dark-mode]="highContrast" (keydown)="onKeyPress($event)" tabindex="0">
+  <h1 style="font-size: 40px;" >🎵 Color Symphony</h1>
+  <h3>Listen, Watch, and Repeat the Musical Pattern!</h3>
+
+  <div class="toggles">
+    <button (click)="toggleSound()">{{ soundOn ? '🔊 Sound On' : '🔇 Sound Off' }}</button>
+    <button (click)="toggleContrast()">{{ highContrast ? '🌙 Normal View' : '🌞 High Contrast' }}</button>
+  </div>
+
+  <div class="scoreboard">
+    <span>Score: {{ score }}</span>
+    <span>Level: {{ level }}</span>
+  </div>
+
+  <p class="status">{{ statusMessage }}</p>
+
+  <div class="grid">
+    <button *ngFor="let color of colors"
+            [id]="'btn-' + color.id"
+            class="color-button"
+            [ngStyle]="{'background-color': highContrast ? color.highContrast : color.color}"
+            (click)="onColorClick(color.id)">
+      {{ color.name }}<br><small>{{ color.id }}</small>
+    </button>
+  </div>
+
+  <button class="start" (click)="startGame()">▶️ Start Game</button>
+
+  <div class="how-to-play">
+    <h3>How to Play:</h3>
+    <ul>
+      <li>Watch the colors light up and listen to their musical notes</li>
+      <li>Click the colors in the same order they were shown</li>
+      <li>Use mouse/touch or keyboard: 1=Red, 2=Blue, 3=Green, 4=Yellow</li>
+      <li>Each level adds one more color to remember</li>
+      <li>Have fun and don’t worry about mistakes!</li>
+    </ul>
+  </div>
+</div>
