@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true
 })
 export class ColorSymphony {
+  isGameActive = false;
 
   title = 'Color Symphony';
   score = 0;
@@ -36,11 +37,23 @@ export class ColorSymphony {
   }
 
   startGame() {
+    this.isGameActive = true;
     this.sequence = [];
     this.playerSequence = [];
     this.level = 1;
     this.score = 0;
     this.addColorToSequence();
+  }
+
+  quitGame() {
+    this.isGameActive = false;
+    this.sequence = [];
+    this.playerSequence = [];
+    this.level = 1;
+    this.score = 0;
+    this.statusMessage = 'Game quit. Press Start to begin the Color Symphony!';
+    this.isPlayerTurn = false;
+    this.currentStep = 0;
   }
 
   addColorToSequence() {
