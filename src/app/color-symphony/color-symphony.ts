@@ -96,6 +96,29 @@ export class ColorSymphony {
     }
   }
 
+  onColorClick(colorId: number) {
+    if (!this.isPlayerTurn) return;
+
+    this.highlightColor(colorId);
+    this.playerSequence.push(colorId);
+
+    const correct = this.sequence[this.playerSequence.length - 1] === colorId;
+
+    if (!correct) {
+      this.statusMessage = 'Oops! Try again from the beginning.';
+      this.isPlayerTurn = false;
+      this.isGameActive = false;
+      return;
+    }
+
+    if (this.playerSequence.length === this.sequence.length) {
+      this.score += 10;
+      this.level++;
+      this.statusMessage = 'Well done! Next round!';
+      setTimeout(() => this.addColorToSequence(), 1000);
+    }
+  }
+
   playSound(colorId: number | 'all') {
     if (!this.soundOn) return;
     let audio: HTMLAudioElement;
@@ -153,30 +176,6 @@ export class ColorSymphony {
 
     };
     playNext();
-  }
-
-  onColorClick(colorId: number) {
-    if (!this.isPlayerTurn) return;
-
-    this.highlightColor(colorId);
-    this.playerSequence.push(colorId);
-
-    const correct = this.sequence[this.playerSequence.length - 1] === colorId;
-
-    if (!correct) {
-      this.statusMessage = 'Oops! Try again from the beginning.';
-      this.isPlayerTurn = false;
-      return;
-
-    }
-
-    if (this.playerSequence.length === this.sequence.length) {
-      this.score += 10;
-      this.level++;
-      this.statusMessage = 'Well done! Next round!';
-      setTimeout(() => this.addColorToSequence(), 1000);
-    }
-
   }
 
   onKeyPress(event: KeyboardEvent) {
