@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './color-symphony.html',
   styleUrl: './color-symphony.scss',
-  standalone:true
+  standalone: true
 })
 export class ColorSymphony {
 
@@ -68,8 +68,7 @@ export class ColorSymphony {
   }
 
   highlightColor(colorId: number) {
-    const audio = new Audio(`assets/sounds/${colorId}.mp3`);
-    if (this.soundOn) audio.play();
+    this.playSound(colorId);
 
     const colorBtn = document.getElementById('btn-' + colorId);
     if (colorBtn) {
@@ -78,6 +77,65 @@ export class ColorSymphony {
         colorBtn.classList.remove('active');
       }, 500);
     }
+  }
+
+  playSound(colorId: number | 'all') {
+    if (!this.soundOn) return;
+    let audio: HTMLAudioElement;
+    if (colorId === 'all') {
+      // Play all color sounds in sequence
+      this.playAllSound();
+    } else {
+      audio = new Audio(`assets/sounds/${colorId}.mp3`);
+      audio.onerror = () => {
+        // Fallback: generate tone using Web Audio API
+        const color = this.colors.find(c => c.id === colorId);
+        if (color) {
+          this.playTone(color.sound, 0.5);
+        }
+      };
+      audio.play();
+    }
+  }
+
+  // Play a musical note using Web Audio API
+  playTone(note: string, duration: number = 0.5) {
+    const noteFrequencies: { [key: string]: number } = {
+      'C': 261.63,
+      'D': 293.66,
+      'E': 329.63,
+      'F': 349.23
+    };
+    const freq = noteFrequencies[note];
+    if (!freq) return;
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.value = freq;
+    oscillator.connect(ctx.destination);
+    oscillator.start();
+    setTimeout(() => {
+      oscillator.stop();
+      ctx.close();
+    }, duration * 1000);
+  }
+
+  playAllSound() {
+    // Play all color sounds in sequence, one after another
+    const colorIds = this.colors.map(c => c.id);
+    let idx = 0;
+    const playNext = () => {
+      if (idx < colorIds.length) {
+        const audio = new Audio(`assets/sounds/${colorIds[idx]}.mp3`);
+        audio.play();
+        audio.onended = () => {
+          idx++;
+          playNext();
+        };
+      }
+
+    };
+    playNext();
   }
 
   onColorClick(colorId: number) {
@@ -92,7 +150,7 @@ export class ColorSymphony {
       this.statusMessage = 'Oops! Try again from the beginning.';
       this.isPlayerTurn = false;
       return;
-  
+
     }
 
     if (this.playerSequence.length === this.sequence.length) {
@@ -101,11 +159,11 @@ export class ColorSymphony {
       this.statusMessage = 'Well done! Next round!';
       setTimeout(() => this.addColorToSequence(), 1000);
     }
-  
+
   }
 
   onKeyPress(event: KeyboardEvent) {
-    const keyMap:any = { '1': 1, '2': 2, '3': 3, '4': 4 };
+    const keyMap: any = { '1': 1, '2': 2, '3': 3, '4': 4 };
     const key = event.key;
     if (keyMap[key]) {
       this.onColorClick(keyMap[key]);
