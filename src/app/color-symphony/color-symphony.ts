@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-color-symphony',
   imports: [CommonModule],
   templateUrl: './color-symphony.html',
-  styleUrl: './color-symphony.scss'
+  styleUrl: './color-symphony.scss',
+  standalone:true
 })
 export class ColorSymphony {
 

@@ -1,0 +1,28 @@
+<h2>Game Portal</h2>
+
+<nav>
+  <div class="carousel">
+    <a routerLink="/login" routerLinkActive="active">
+      <h3>Login</h3>
+      <p>Access your teacher portal</p>
+    </a>
+    <a routerLink="/dashboard" routerLinkActive="active">
+      <h3>Dashboard</h3>
+      <p>Manage your classroom</p>
+    </a>
+    <a routerLink="/game-hub" routerLinkActive="active">
+      <h3>Game Hub</h3>
+      <p>Interactive learning games</p>
+    </a>
+    <a routerLink="/color-symphony" routerLinkActive="active">
+      <h3>Color Symphony</h3>
+    </a>
+  </div>
+
+  <div class="carousel-nav">
+    <button (click)="manualScroll(-1)" class="nav-button prev">←</button>
+    <button (click)="manualScroll(1)" class="nav-button next">→</button>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+

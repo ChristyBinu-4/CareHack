@@ -1,25 +1,29 @@
 import { Routes } from '@angular/router';
+import { Home } from './home/home';
 import { LoginComponent } from './login/login';
-import { DashboardComponent } from './dashboard/dashboard'; // Assuming you have a DashboardComponent
-import { StudentProfile } from './student-profile/student-profile';
+import { DashboardComponent } from './dashboard/dashboard';
 import { GameHubComponent } from './game-hub/game-hub';
 import { ColorSymphony } from './color-symphony/color-symphony';
 
 export const routes: Routes = [
-  { 
-    path: 'login', 
+  {
+    path: 'home',
+    component: Home,
+  },
+  {
+    path: 'login',
     component: LoginComponent
   },
-  { 
-    path: 'dashboard', 
+  {
+    path: 'dashboard',
     component: DashboardComponent
   },
-  { 
-    path: 'game-hub', 
+  {
+    path: 'game-hub',     
     component: GameHubComponent
   },
   {
     path: 'color-symphony',
-    component:ColorSymphony
+    component: ColorSymphony
   }
 ];
