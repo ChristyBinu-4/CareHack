@@ -1,0 +1,32 @@
+ <div style="text-align: center; margin-bottom: 20px;">
+  <label>
+    <input type="radio" name="mode" value="visual" [(ngModel)]="mode" />
+    Visually Impaired (Sound)
+  </label>
+  &nbsp;&nbsp;
+  <label>
+    <input type="radio" name="mode" value="hearing" [(ngModel)]="mode" />
+    Hearing Impaired (Visual)
+  </label>
+    &nbsp;&nbsp;
+  <label>
+    <input type="radio" name="mode" value="normal" [(ngModel)]="mode" />
+    Normal (Visual + Sound)
+  </label>
+
+</div>
+
+<div *ngIf="activeItem && (mode === 'hearing' || mode === 'normal')" class="spelling-container">
+  <div class="emoji emoji-large">{{ activeItem.image }}</div>
+  <div class="spelling">{{ activeItem.word.toUpperCase().split('').join(' ') }}</div>
+</div>
+<div class="bubble-container">
+  <div
+    class="bubble"
+    *ngFor="let item of letters"
+    (click)="onBubbleClick(item)"
+  >
+    <div class="letter">{{ item.letter }}</div>
+    <div class="emoji">{{ item.image }}</div>
+  </div>
+</div>
