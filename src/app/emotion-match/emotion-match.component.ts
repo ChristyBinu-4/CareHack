@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ResultsScreenComponent } from './results-screen/results-screen.component';
+import { GameBoardComponent } from './game-board/game-board.component';
 
 
 
@@ -21,7 +23,9 @@ interface SelectedEmoji {
     selector: 'app-emotion-match',
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        GameBoardComponent,
+        ResultsScreenComponent
     ],
     templateUrl: './emotion-match.component.html',
     styleUrls: ['./emotion-match.component.css']

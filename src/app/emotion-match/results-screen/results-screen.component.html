@@ -1,0 +1,24 @@
+<div class="results-screen">
+  <canvas #confettiCanvas class="confetti-canvas" width="600" height="300" aria-hidden="true"></canvas>
+  <h2 class="results-title">Game Complete!</h2>
+  <div class="final-score">Your Score: <span>{{score}}</span>/{{totalRounds}}</div>
+  <div class="results-summary" *ngIf="resultSummary">
+    <p>{{ resultSummary }}</p>
+  </div>
+  <div class="results-suggestions" *ngIf="resultSuggestions.length > 0">
+    <ul>
+      <li *ngFor="let suggestion of resultSuggestions">{{ suggestion }}</li>
+    </ul>
+  </div>
+  <div class="results-grid">
+    <span *ngFor="let sel of selectedEmojis"
+          class="result-emoji"
+          [class.correct]="sel.correct"
+          [class.incorrect]="!sel.correct">
+      {{sel.emoji}}
+    </span>
+  </div>
+  <button type="button" (click)="playAgain.emit($event)" class="ripple-btn">
+    <span class="ripple"></span>Play Again
+  </button>
+</div>
