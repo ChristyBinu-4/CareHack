@@ -20,12 +20,12 @@ export class Home  {
       // description: 'Give description' // optional
     },
     {
-      title: 'Alphabet',
+      title: 'Bubble alphabet',
       link: '/alphabet',
       // description: 'Give description' // optional
     },
     {
-      title: 'Emotion match',
+      title: 'Emotion Explorer',
       link: '/emotion-match',
       // description: 'Give description' // optional
     },
